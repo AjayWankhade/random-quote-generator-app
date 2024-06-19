@@ -2,10 +2,11 @@ import express from "express";
 import pool from "../backend/config/db.js";
 const app = express();
 const PORT = 3000;
+import userRoutes from "../backend/routes/userRoutes.js";
 
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
+app.use("/users", userRoutes);
 
 app.get("/test-db", async (req, res) => {
   try {
