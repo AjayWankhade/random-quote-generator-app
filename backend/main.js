@@ -2,6 +2,9 @@ import express from "express";
 import pool from "../backend/config/db.js";
 const app = express();
 const PORT = 3000;
+import dotenv from "dotenv";
+dotenv.config();
+
 import userRoutes from "../backend/routes/userRoutes.js";
 
 app.use(express.json());

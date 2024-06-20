@@ -1,7 +1,10 @@
 import prisma from "../prismaClient.js";
+import {
+  comparePassword,
+  generateToken,
+  hashPassword,
+} from "../utils/authUtils.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { generateToken } from "../utils/authUtils.js";
 
 export const signupUserService = async ({
   email,
@@ -10,18 +13,19 @@ export const signupUserService = async ({
   lastName,
 }) => {
   try {
-    // Check if user already exists
+    // Check if the user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
+
     if (existingUser) {
       throw new Error("User already exists");
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hashPassword(password);
 
-    // Create new user
+    // Create a new user
     const newUser = await prisma.user.create({
       data: {
         email,
@@ -33,6 +37,7 @@ export const signupUserService = async ({
 
     return newUser;
   } catch (error) {
+    console.error(`Error signing up user: ${error.message}`);
     throw new Error(`Error signing up user: ${error.message}`);
   }
 };
@@ -50,7 +55,11 @@ export const signInUserService = async ({ email, password }) => {
     }
 
     // Compare passwords
+    console.log("User password from DB:", user.password);
+    console.log("Entered password:", password);
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log("Is password valid?", isPasswordValid);
+
     if (!isPasswordValid) {
       throw new Error("Invalid email or password");
     }
@@ -59,6 +68,7 @@ export const signInUserService = async ({ email, password }) => {
     const token = generateToken(user.userId);
     return token;
   } catch (error) {
+    console.error(`Error signing in user: ${error.message}`);
     throw new Error(`Error signing in user: ${error.message}`);
   }
 };
