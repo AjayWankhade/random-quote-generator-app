@@ -1,8 +1,8 @@
 import prisma from "../prismaClient.js";
 import {
-  comparePassword,
   generateToken,
   hashPassword,
+  comparePassword,
 } from "../utils/authUtils.js";
 import bcrypt from "bcrypt";
 
@@ -57,7 +57,7 @@ export const signInUserService = async ({ email, password }) => {
     // Compare passwords
     console.log("User password from DB:", user.password);
     console.log("Entered password:", password);
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await comparePassword(password, user.password);
     console.log("Is password valid?", isPasswordValid);
 
     if (!isPasswordValid) {

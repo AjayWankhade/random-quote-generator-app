@@ -9,7 +9,7 @@ import userRoutes from "../backend/routes/userRoutes.js";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/users", userRoutes);
+app.use("/api/users", userRoutes);
 
 app.get("/test-db", async (req, res) => {
   try {
