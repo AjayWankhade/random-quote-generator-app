@@ -6,10 +6,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import userRoutes from "../backend/routes/userRoutes.js";
+import quoteRoutes from "../backend/routes/quoteRoute.js";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/users", userRoutes);
+app.use("/api", quoteRoutes);
 
 app.get("/test-db", async (req, res) => {
   try {

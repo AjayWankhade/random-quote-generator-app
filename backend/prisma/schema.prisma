@@ -18,4 +18,15 @@ model User {
   lastName   String
   createDate DateTime? @default(now())
   updateDate DateTime? @updatedAt
+  quote      Quote[]
+}
+
+model Quote {
+  quoteId    Int       @id @default(autoincrement())
+  text       String    @db.VarChar(500)
+  author     String
+  createDate DateTime? @default(now())
+  updateDate DateTime? @updatedAt
+  userId     Int?
+  user       User?     @relation(fields: [userId], references: [userId])
 }
